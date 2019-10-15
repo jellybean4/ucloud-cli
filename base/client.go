@@ -1,6 +1,8 @@
 package base
 
 import (
+	"github.com/ucloud/ucloud-sdk-go/services/ufile"
+	"github.com/jellybean4/ucloud-sdk-go/services/uflink"
 	ppathx "github.com/ucloud/ucloud-sdk-go/private/services/pathx"
 	pudb "github.com/ucloud/ucloud-sdk-go/private/services/udb"
 	puhost "github.com/ucloud/ucloud-sdk-go/private/services/uhost"
@@ -46,6 +48,8 @@ type Client struct {
 	udb.UDBClient
 	umem.UMemClient
 	uphost.UPHostClient
+	uflink.UFlinkClient
+	ufile.UFileClient
 	PrivateUHostClient
 	PrivateUDBClient
 	PrivateUMemClient
@@ -74,6 +78,8 @@ func NewClient(config *sdk.Config, credential *auth.Credential) *Client {
 		pudbClient     = *pudb.NewClient(config, credential)
 		pumemClient    = *pumem.NewClient(config, credential)
 		ppathxClient   = *ppathx.NewClient(config, credential)
+		uflinkClient   = *uflink.NewClient(config, credential)
+		ufileClient    = *ufile.NewClient(config, credential)
 	)
 
 	uaccountClient.Client.AddRequestHandler(handler)
@@ -91,6 +97,8 @@ func NewClient(config *sdk.Config, credential *auth.Credential) *Client {
 	pudbClient.Client.AddRequestHandler(handler)
 	pumemClient.Client.AddRequestHandler(handler)
 	ppathxClient.Client.AddRequestHandler(handler)
+	ufileClient.Client.AddRequestHandler(handler)
+	uflinkClient.Client.AddRequestHandler(handler)
 
 	return &Client{
 		uaccountClient,
@@ -104,6 +112,8 @@ func NewClient(config *sdk.Config, credential *auth.Credential) *Client {
 		udbClient,
 		umemClient,
 		uphostClient,
+		uflinkClient,
+		ufileClient,
 		puhostClient,
 		pudbClient,
 		pumemClient,

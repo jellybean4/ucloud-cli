@@ -2,6 +2,8 @@
 github.com/cpuguy83/go-md2man/md2man
 # github.com/inconshreveable/mousetrap v1.0.0
 github.com/inconshreveable/mousetrap
+# github.com/jellybean4/ucloud-sdk-go v0.12.5
+github.com/jellybean4/ucloud-sdk-go/services/uflink
 # github.com/konsorten/go-windows-terminal-sequences v1.0.1
 github.com/konsorten/go-windows-terminal-sequences
 # github.com/pkg/errors v0.8.0
@@ -15,7 +17,7 @@ github.com/spf13/cobra
 github.com/spf13/cobra/doc
 # github.com/spf13/pflag v1.0.3 => github.com/lixiaojun629/pflag v1.0.5
 github.com/spf13/pflag
-# github.com/ucloud/ucloud-sdk-go v0.8.10
+# github.com/ucloud/ucloud-sdk-go v0.11.1
 github.com/ucloud/ucloud-sdk-go/private/services/pathx
 github.com/ucloud/ucloud-sdk-go/private/services/udb
 github.com/ucloud/ucloud-sdk-go/private/services/uhost
@@ -25,6 +27,7 @@ github.com/ucloud/ucloud-sdk-go/services/uaccount
 github.com/ucloud/ucloud-sdk-go/services/udb
 github.com/ucloud/ucloud-sdk-go/services/udisk
 github.com/ucloud/ucloud-sdk-go/services/udpn
+github.com/ucloud/ucloud-sdk-go/services/ufile
 github.com/ucloud/ucloud-sdk-go/services/uhost
 github.com/ucloud/ucloud-sdk-go/services/ulb
 github.com/ucloud/ucloud-sdk-go/services/umem

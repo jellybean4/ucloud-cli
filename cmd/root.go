@@ -183,6 +183,7 @@ func Execute() {
 	cmd.AddCommand(NewCmdRedis())
 	cmd.AddCommand(NewCmdMemcache())
 	cmd.AddCommand(NewCmdExt())
+	cmd.AddCommand(NewCmdUFlink())
 	for _, c := range cmd.Commands() {
 		if c.Name() != "init" && c.Name() != "gendoc" && c.Name() != "config" {
 			c.PersistentFlags().StringVar(&global.PublicKey, "public-key", global.PublicKey, "Set public key to override the public key in local config file")
