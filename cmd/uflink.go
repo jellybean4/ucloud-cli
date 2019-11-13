@@ -71,9 +71,9 @@ func NewCmdUFlinkApplicationCreate(out io.Writer) *cobra.Command {
 
 	req := base.BizClient.NewCreateUFlinkApplicationRequest()
 	cmd := &cobra.Command{
-		Use:   "create",
-		Short: `Create uflink application`,
-		Long:  `Create uflink application`,
+		Use:     "create",
+		Short:   `Create uflink application`,
+		Long:    `Create uflink application`,
 		Example: `run [OPTIONS] <jar-file-path-in-ufile> <arguments>`,
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println(len(cmd.Flags().Args()))
@@ -81,7 +81,7 @@ func NewCmdUFlinkApplicationCreate(out io.Writer) *cobra.Command {
 			appParamsContent := ""
 
 			if err != nil {
-				fmt.Fprintf(out,"Failed to read encode submit params for %s\n", base.ParseError(err))
+				fmt.Fprintf(out, "Failed to read encode submit params for %s\n", base.ParseError(err))
 				return
 			}
 			if len(cmd.Flags().Args()) < 1 {
@@ -90,7 +90,7 @@ func NewCmdUFlinkApplicationCreate(out io.Writer) *cobra.Command {
 			}
 			appParams := cmd.Flags().Args()[1:]
 			if len(appParams) > 0 {
-				appParamsContent = strings.Join(appParams, " ")
+				appParamsContent =strings.Join(appParams, " ")
 			}
 
 			encodeAppParams := Encode(appParamsContent)
