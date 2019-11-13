@@ -13,3 +13,9 @@ type ApplicationResponse2 struct {
 
 	Data string
 }
+
+type ApplicationResponse3 struct {
+	response.CommonBase
+
+	Data int64
+}

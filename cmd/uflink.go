@@ -36,11 +36,11 @@ type UFlinkPointFileRow struct {
 
 type FlinkRunParams struct {
 	Class                 string `json:"--class,omitempty"`
-	Parallelism           int    `json:"--parallelism,omitempty"`
+	Parallelism           string `json:"--parallelism,omitempty"`
 	FromSavepoint         string `json:"--fromSavepoint,omitempty"`
 	YarnJobManagerMemory  string `json:"--yarnjobManagerMemory,omitempty"`
-	YarnContainer         int    `json:"--yarncontainer,omitempty"`
-	YarnSlots             int    `json:"--yarnslots,omitempty"`
+	YarnContainer         string `json:"--yarncontainer,omitempty"`
+	YarnSlots             string `json:"--yarnslots,omitempty"`
 	YarnTaskManagerMemory string `json:"--yarntaskManagerMemory,omitempty"`
 }
 
@@ -65,6 +65,21 @@ func NewCmdUFlink() *cobra.Command {
 	return cmd
 }
 
+func parseSubmitParams(params FlinkRunParams) (string, error) {
+	paramsMap := make(map[string]string)
+	if temp, err := json.Marshal(params); err != nil {
+		return "", err
+	} else if err := json.Unmarshal(temp, &paramsMap); err != nil {
+		return "", err
+	} else {
+		result := ""
+		for k, v := range paramsMap {
+			result += fmt.Sprintf(" %s %s ", k, v)
+		}
+		return result, nil
+	}
+}
+
 func NewCmdUFlinkApplicationCreate(out io.Writer) *cobra.Command {
 	var submitParams FlinkRunParams
 	var flinkConf string
@@ -72,31 +87,28 @@ func NewCmdUFlinkApplicationCreate(out io.Writer) *cobra.Command {
 	req := base.BizClient.NewCreateUFlinkApplicationRequest()
 	cmd := &cobra.Command{
 		Use:     "create",
-		Short:   `Create uflink application`,
-		Long:    `Create uflink application`,
-		Example: `run [OPTIONS] <jar-file-path-in-ufile> <arguments>`,
+		Short:   `Create uflink application: [OPTIONS] <jar-file-path-in-ufile> <arguments>`,
+		Long:    `Create uflink application: [OPTIONS] <jar-file-path-in-ufile> <arguments>`,
+		Example: `[OPTIONS] <jar-file-path-in-ufile> <arguments>`,
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(len(cmd.Flags().Args()))
-			submitParamsContent, err := json.Marshal(submitParams)
-			appParamsContent := ""
-
-			if err != nil {
-				fmt.Fprintf(out, "Failed to read encode submit params for %s\n", base.ParseError(err))
-				return
-			}
 			if len(cmd.Flags().Args()) < 1 {
 				fmt.Fprint(out, "UFlink application ufile path not specified\n")
 				return
 			}
-			appParams := cmd.Flags().Args()[1:]
-			if len(appParams) > 0 {
-				appParamsContent =strings.Join(appParams, " ")
+			req.AppFile = &(cmd.Flags().Args()[0])
+
+			if submitParamsContent, err := parseSubmitParams(submitParams); err != nil {
+				fmt.Fprintf(out, "Failed to read encode submit params for %s\n", base.ParseError(err))
+				return
+			} else {
+				req.SubmitParams = &submitParamsContent
 			}
 
-			encodeAppParams := Encode(appParamsContent)
-			encodeSubmitParams := Encode(string(submitParamsContent))
-			req.AppParams = &encodeAppParams
-			req.SubmitParams = &encodeSubmitParams
+			appParams := cmd.Flags().Args()[1:]
+			if len(appParams) > 0 {
+				appParamsContent := strings.Join(appParams, " ")
+				req.AppParams = &appParamsContent
+			}
 
 			if flinkConf != "" {
 				content, err := ioutil.ReadFile(flinkConf)
@@ -110,8 +122,8 @@ func NewCmdUFlinkApplicationCreate(out io.Writer) *cobra.Command {
 				configs := ""
 				req.RuntimeParams = &configs
 			}
-
-			_, err = base.BizClient.CreateUFlinkApplication(req)
+			base.LogInfo(fmt.Sprintf("Prepare to create uflink application: %v", base.ToQueryMap(req)))
+			_, err := base.BizClient.CreateUFlinkApplication(req)
 			if err != nil {
 				base.LogError(fmt.Sprintf("Failed to create new uflink application: %s", base.ParseError(err)))
 				return
@@ -135,25 +147,28 @@ func NewCmdUFlinkApplicationCreate(out io.Writer) *cobra.Command {
 	//req.AppFile = cmd.Flags().String("app-file", "", "Optional. UFile path of the uflink application jar file")
 	req.SQL = cmd.Flags().String("sql", "", "Optional. Flink sql used to create uflink application")
 	req.Resources = cmd.Flags().String("resources", "", "Optional. Comma separated list of ufile resource files")
+	req.JobType = cmd.Flags().String("job-type", "JAR_JOB", "Required. Job Type")
 
 	// flink run params
 	cmd.Flags().StringVar(&submitParams.Class, "classname", "", `Optional. Class with the program entry point ("main" method or "getPlan()" method. Only needed if the JAR file does not specify the class in its manifest.`)
-	cmd.Flags().IntVar(&submitParams.Parallelism, "parallelism", 1, `Optional. The parallelism with which to run the program. Optional flag to override the default value specified in the configuration.`)
+	cmd.Flags().StringVar(&submitParams.Parallelism, "parallelism", "1", `Optional. The parallelism with which to run the program. Optional flag to override the default value specified in the configuration.`)
 	cmd.Flags().StringVar(&submitParams.FromSavepoint, "fromSavepoint", "", `Optional. Path to a savepoint to restore the job from (for example hdfs:///flink/savepoint-1537)`)
 	cmd.Flags().StringVar(&submitParams.YarnJobManagerMemory, "yarnjobManagerMemory", "", `Optional. Memory for JobManager Container with optional unit(default: MB)`)
 	cmd.Flags().StringVar(&submitParams.YarnTaskManagerMemory, "yarntaskManagerMemory", "", `Optional. Memory per TaskManager Container with optional unit (default: MB)`)
-	cmd.Flags().IntVar(&submitParams.YarnContainer, "yarncontainer", 1, `Optional. Number of YARN container to allocate (=Number of Task Managers)`)
-	cmd.Flags().IntVar(&submitParams.YarnSlots, "yarnslots", 1, `Optional. Number of slots per TaskManager`)
+	cmd.Flags().StringVar(&submitParams.YarnContainer, "yarncontainer", "1", `Optional. Number of YARN container to allocate (=Number of Task Managers)`)
+	cmd.Flags().StringVar(&submitParams.YarnSlots, "yarnslots", "1", `Optional. Number of slots per TaskManager`)
 
 	//cmd.Flags().StringVar(&appParams, "app-params", "", "Optional. Main method args of the new uflink application")
 	cmd.Flags().StringVar(&flinkConf, "flink-conf", "", "Optional. File path of flink-conf.yaml override default flink conf")
 
 	cmd.Flags().SetFlagValues("flink-version", "1.6.4_2.11", "1.7.2_2.11", "1.7.2_2.12", "1.8.0_2.11", "1.8.0_2.12")
+	cmd.Flags().SetFlagValues("job-type", "JAR_JOB", "SQL_JOB")
 	cmd.Flags().SetInterspersed(false)
 
 	cmd.MarkFlagRequired("instance-id")
 	cmd.MarkFlagRequired("name")
 	cmd.MarkFlagRequired("flink-version")
+	cmd.MarkFlagRequired("job-type")
 	return cmd
 }
 

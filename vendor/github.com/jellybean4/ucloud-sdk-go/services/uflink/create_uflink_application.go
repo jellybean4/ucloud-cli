@@ -37,9 +37,9 @@ func (c *UFlinkClient) NewCreateUFlinkApplicationRequest() *CreateUFlinkApplicat
 	return req
 }
 
-func (c *UFlinkClient) CreateUFlinkApplication(req *CreateUFlinkApplicationRequest) (*ApplicationResponse2, error) {
+func (c *UFlinkClient) CreateUFlinkApplication(req *CreateUFlinkApplicationRequest) (*ApplicationResponse3, error) {
 	var err error
-	var res ApplicationResponse2
+	var res ApplicationResponse3
 
 	err = c.Client.InvokeAction("CreateUFlinkApplication", req, &res)
 	if err != nil {

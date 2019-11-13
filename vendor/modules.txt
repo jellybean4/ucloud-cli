@@ -2,7 +2,7 @@
 github.com/cpuguy83/go-md2man/md2man
 # github.com/inconshreveable/mousetrap v1.0.0
 github.com/inconshreveable/mousetrap
-# github.com/jellybean4/ucloud-sdk-go v0.12.5
+# github.com/jellybean4/ucloud-sdk-go v0.12.7
 github.com/jellybean4/ucloud-sdk-go/services/uflink
 # github.com/konsorten/go-windows-terminal-sequences v1.0.1
 github.com/konsorten/go-windows-terminal-sequences

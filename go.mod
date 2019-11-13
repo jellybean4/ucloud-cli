@@ -3,7 +3,7 @@ module github.com/ucloud/ucloud-cli
 go 1.12
 
 require (
-	github.com/jellybean4/ucloud-sdk-go v0.12.5
+	github.com/jellybean4/ucloud-sdk-go v0.12.7
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/sirupsen/logrus v1.3.0
 	github.com/spf13/cobra v0.0.3

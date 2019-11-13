@@ -24,6 +24,10 @@ github.com/jellybean4/ucloud-sdk-go v0.12.4 h1:nKtAeXk23Sa/RDeSF4LwXpetkL0KQE83m
 github.com/jellybean4/ucloud-sdk-go v0.12.4/go.mod h1:p2j/0nODcTg0Oi1OCdYrH9NYqHLsR1lqn0xpxnG6Wi0=
 github.com/jellybean4/ucloud-sdk-go v0.12.5 h1:sgWawIQtoSc/hSjVh/npM0KAxCGhJ3isvocfpexOKE0=
 github.com/jellybean4/ucloud-sdk-go v0.12.5/go.mod h1:p2j/0nODcTg0Oi1OCdYrH9NYqHLsR1lqn0xpxnG6Wi0=
+github.com/jellybean4/ucloud-sdk-go v0.12.6 h1:nXEDtr8Ye+DlAQpv+HXN2Dvqpv9UnzsYiH156lqz+MI=
+github.com/jellybean4/ucloud-sdk-go v0.12.6/go.mod h1:p2j/0nODcTg0Oi1OCdYrH9NYqHLsR1lqn0xpxnG6Wi0=
+github.com/jellybean4/ucloud-sdk-go v0.12.7 h1:vlAbnY4KD0J3Se0xIbfikkDn7EE0sukV3xI85xnwCGM=
+github.com/jellybean4/ucloud-sdk-go v0.12.7/go.mod h1:p2j/0nODcTg0Oi1OCdYrH9NYqHLsR1lqn0xpxnG6Wi0=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1 h1:mweAR1A6xJ3oS2pRaGiHgQ4OO8tzTaLawm8vnODuwDk=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/kr/pretty v0.1.0 h1:L/CwN0zerZDmRFUapSPitk6f+Q3+0za1rQkzVuMiMFI=
